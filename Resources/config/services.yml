@@ -1,0 +1,14 @@
+parameters:
+    pspid: ~
+    environment: ~
+    sha_in: ~
+    sha_out: ~
+    options: ~
+
+services:
+    snowcap_ogone.manager:
+        class: Snowcap\OgoneBundle\Manager
+        arguments: [@logger, @snowcap_ogone.form_generator, %pspid%,%environment%,%sha_in%,%sha_out%,%options%]
+    snowcap_ogone.form_generator:
+        class: Snowcap\OgoneBundle\SimpleFormGenerator
+        arguments: [@twig, %kernel.root_dir%]

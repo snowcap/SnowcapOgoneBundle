@@ -1,0 +1,12 @@
+<form method="post" action="{{ ogone_uri }}" id="{{ form_name }}" name="{{ form_name }}">
+    {% for key, value in parameters %}
+	    {% if value is not empty %}
+	        <input type="hidden" name="{{ key }}" value="{{ value|escape }}"  />
+        {% endif %}
+    {% endfor %}
+    <input type="hidden" name="SHASIGN" value="{{ sha_sign }}" />
+
+    {% if show_submit %}
+    <button name="ogonesubmit" type="submit" id="ogonesubmit">{{ 'ogone.submit.label'|trans }}</button>
+    {% endif %}
+</form>
