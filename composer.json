@@ -28,7 +28,7 @@
         "symfony/symfony": "2.1.*",
         "symfony/framework-bundle": "2.1.*",
         "symfony/monolog-bundle": "2.1.*",
-        "marlon-be/marlon-ogone": "1.0.4"
+        "marlon-be/marlon-ogone": "dev-master#a7560e3e446cf93fe9439915a43da202f7bbc01d"
     },
     "autoload": {
         "psr-0": { "Snowcap\\OgoneBundle": "" }
