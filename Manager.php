@@ -93,7 +93,7 @@ class Manager
         $paymentRequest->setPspid($this->pspid);
         $paymentRequest->setCn($customerName);
         $paymentRequest->setOrderid($orderId);
-        $paymentRequest->setAmount((int) ($amount * 100));
+        $paymentRequest->setAmount($amount);
         $paymentRequest->setCurrency($currency);
 
         // setting options defined in config
