@@ -64,7 +64,7 @@ class SimpleFormGenerator implements FormGenerator
         /* @var \Symfony\Bundle\TwigBundle\Loader\FilesystemLoader $loader */
         $loader = $this->environment->getLoader();
         $loader->addPath($this->rootDir . '/Resources/SnowcapOgoneBundle/views/');
-        $loader->addPath(__DIR__ . '/Resources/views/');
+        $loader->addPath(__DIR__ . '/../Resources/views/');
         $template = $this->environment->loadTemplate('form.html.twig');
 
         return $template->render(array('parameters' => $this->getParameters(), 'ogone_uri' => $this->getOgoneUri(), 'sha_sign' => $this->getShaSign(), 'show_submit' => $this->showSubmitButton, 'form_name' => $this->formName));

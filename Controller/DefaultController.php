@@ -28,7 +28,7 @@ class DefaultController extends Controller
         $parameters = array_merge($this->getRequest()->query->all(),$this->getRequest()->request->all());
 
         /** @var $ogone \Snowcap\OgoneBundle\Manager */
-        $ogone = $this->get('snowcap_ogone.manager');
+        $ogone = $this->get('snowcap_ogone');
 
         $ogone->paymentResponse($parameters);
 
