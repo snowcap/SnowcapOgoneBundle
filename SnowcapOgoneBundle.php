@@ -13,14 +13,10 @@ namespace Snowcap\OgoneBundle;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-use Snowcap\OgoneBundle\DependencyInjection\Compiler\ListenerCompilerPass;
-
 class SnowcapOgoneBundle extends Bundle
 {
     public function build(ContainerBuilder $container)
     {
         parent::build($container);
-
-        $container->addCompilerPass(new ListenerCompilerPass());
     }
 }

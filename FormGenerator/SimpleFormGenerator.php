@@ -8,20 +8,28 @@
  * file that was distributed with this source code.
  */
 
-namespace Snowcap\OgoneBundle;
+namespace Snowcap\OgoneBundle\FormGenerator;
 
 use Twig_Environment;
 
 use Ogone\FormGenerator\FormGenerator;
 use Ogone\PaymentRequest;
-use InvalidArgumentException;
 
 class SimpleFormGenerator implements FormGenerator
 {
+    /**
+     * @var PaymentRequest
+     */
     private $paymentRequest;
 
+    /**
+     * @var bool
+     */
     private $showSubmitButton = true;
 
+    /**
+     * @var string
+     */
     private $formName = 'ogone';
 
     /**
@@ -52,6 +60,7 @@ class SimpleFormGenerator implements FormGenerator
     {
         $this->paymentRequest = $paymentRequest;
 
+        // TODO: make this part slightly more flexible or generate only hidden fields ?
         /* @var \Symfony\Bundle\TwigBundle\Loader\FilesystemLoader $loader */
         $loader = $this->environment->getLoader();
         $loader->addPath($this->rootDir . '/Resources/SnowcapOgoneBundle/views/');
@@ -62,7 +71,7 @@ class SimpleFormGenerator implements FormGenerator
     }
 
     /**
-     * @return mixed
+     * @return array
      */
     protected function getParameters()
     {
@@ -70,7 +79,7 @@ class SimpleFormGenerator implements FormGenerator
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     protected function getOgoneUri()
     {
@@ -78,7 +87,7 @@ class SimpleFormGenerator implements FormGenerator
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     protected function getShaSign()
     {
@@ -86,7 +95,7 @@ class SimpleFormGenerator implements FormGenerator
     }
 
     /**
-     * @param bool $bool
+     * @param bool
      */
     public function showSubmitButton($bool = true)
     {

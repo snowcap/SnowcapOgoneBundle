@@ -10,47 +10,85 @@
 
 namespace Snowcap\OgoneBundle;
 
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Monolog\Logger;
-
 use Ogone\Passphrase;
 use Ogone\PaymentRequest;
 use Ogone\PaymentResponse;
-
 use Ogone\ShaComposer\AllParametersShaComposer;
-use Ogone\ShaComposer\ShaComposer;
 use Ogone\ParameterFilter\ShaInParameterFilter;
 use Ogone\ParameterFilter\ShaOutParameterFilter;
 use Ogone\FormGenerator\FormGenerator;
 
-class Manager
+use Snowcap\OgoneBundle\Event\OgoneEvent;
+
+class OgoneManager
 {
+    /**
+     * @var string
+     */
     protected $pspid;
+
+    /**
+     * @var string
+     */
     protected $environment;
+
+    /**
+     * @var \Ogone\Passphrase
+     */
     protected $shaIn;
+
+    /**
+     * @var \Ogone\Passphrase
+     */
     protected $shaOut;
+
+    /**
+     * @var array
+     */
     protected $options = array();
 
+    /**
+     * @var array
+     */
     protected $listeners = array();
 
-    /** @var Logger */
+    /**
+     * @var EventDispatcher
+     */
+    protected $eventDispatcher;
+
+    /**
+     * @var \Monolog\Logger
+     */
     protected $logger;
 
     /**
-     * @var FormGenerator
+     * @var \Ogone\FormGenerator\FormGenerator
      */
     protected $formGenerator;
 
     /**
-     * @param Logger        $logger
-     * @param FormGenerator $formGenerator
-     * @param string        $pspid
-     * @param string        $environment
-     * @param string        $shaIn
-     * @param string        $shaOut
-     * @param array         $options
+     * @param \Monolog\Logger $logger
+     * @param \Ogone\FormGenerator\FormGenerator $formGenerator
+     * @param $pspid
+     * @param $environment
+     * @param $shaIn
+     * @param $shaOut
+     * @param array $options
      */
-    public function __construct(Logger $logger, FormGenerator $formGenerator, $pspid, $environment, $shaIn, $shaOut, $options = array())
-    {
+    public function __construct(
+        EventDispatcher $eventDispatcher,
+        Logger $logger,
+        FormGenerator $formGenerator,
+        $pspid,
+        $environment,
+        $shaIn,
+        $shaOut,
+        $options = array()
+    ) {
+        // TODO: use config validation
         if ($pspid === "") {
             throw new \Exception('No PSPID defined for Ogone');
         }
@@ -64,6 +102,7 @@ class Manager
             throw new \Exception('No SHA-OUT passphrase defined for Ogone');
         }
 
+        $this->eventDispatcher = $eventDispatcher;
         $this->logger = $logger;
         $this->formGenerator = $formGenerator;
         $this->pspid = $pspid;
@@ -73,6 +112,15 @@ class Manager
         $this->options = $options;
     }
 
+    /**
+     * @param $locale
+     * @param $orderId
+     * @param $customerName
+     * @param $amount
+     * @param string $currency
+     * @param array $options
+     * @return string
+     */
     public function getRequestForm($locale, $orderId, $customerName, $amount, $currency = "EUR", $options = array())
     {
         $passphrase = $this->shaIn;
@@ -109,13 +157,15 @@ class Manager
         }
 
         $paymentRequest->setLanguage($this->localeToIso($locale));
-
         $paymentRequest->validate();
 
         return $this->formGenerator->render($paymentRequest);
     }
 
-    public function paymentResponse($parameters)
+    /**
+     * @param array $parameters
+     */
+    public function paymentResponse(array $parameters)
     {
         $paymentResponse = new PaymentResponse($parameters);
 
@@ -124,20 +174,23 @@ class Manager
         $shaComposer->addParameterFilter(new ShaOutParameterFilter); //optional
 
         if ($paymentResponse->isValid($shaComposer) && $paymentResponse->isSuccessful()) {
-            foreach ($this->listeners as $listener) {
-                $listener->onOgoneSuccess($parameters);
-            }
+            $event = new OgoneEvent($parameters);
+            $this->eventDispatcher->dispatch(OgoneEvents::SUCCESS, $event);
+
             // handle payment confirmation
             $this->logger->info('success');
         } else {
-            // perform logic when the validation fails
-            foreach ($this->listeners as $listener) {
-                $listener->onOgoneFailure($parameters);
-            }
+            $event = new OgoneEvent($parameters);
+            $this->eventDispatcher->dispatch(OgoneEvents::SUCCESS, $event);
+
             $this->logger->info('failure');
         }
     }
 
+    /**
+     * @param string $locale
+     * @return string
+     */
     private function localeToIso($locale)
     {
         switch ($locale) {
@@ -154,10 +207,5 @@ class Manager
                 return $locale;
                 break;
         }
-    }
-
-    public function addListener($listener)
-    {
-        $this->listeners[] = $listener;
     }
 }

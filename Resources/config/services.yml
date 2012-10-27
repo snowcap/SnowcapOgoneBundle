@@ -6,9 +6,11 @@ parameters:
     options: ~
 
 services:
-    snowcap_ogone.manager:
+    snowcap_ogone:
         class: Snowcap\OgoneBundle\Manager
-        arguments: [@logger, @snowcap_ogone.form_generator, %pspid%,%environment%,%sha_in%,%sha_out%,%options%]
+        arguments: [@event_dispatcher, @logger, @snowcap_ogone.form_generator, %pspid%, %environment%, %sha_in%, %sha_out%, %options%]
+
     snowcap_ogone.form_generator:
-        class: Snowcap\OgoneBundle\SimpleFormGenerator
+        class: Snowcap\OgoneBundle\FormGenerator\SimpleFormGenerator
         arguments: [@twig, %kernel.root_dir%]
+        private: true
