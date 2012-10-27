@@ -7,7 +7,7 @@ parameters:
 
 services:
     snowcap_ogone:
-        class: Snowcap\OgoneBundle\Manager
+        class: Snowcap\OgoneBundle\OgoneManager
         arguments: [@event_dispatcher, @logger, @snowcap_ogone.form_generator, %pspid%, %environment%, %sha_in%, %sha_out%, %options%]
 
     snowcap_ogone.form_generator:
