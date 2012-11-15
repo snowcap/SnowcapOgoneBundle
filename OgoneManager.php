@@ -181,7 +181,7 @@ class OgoneManager
             $this->logger->info('success');
         } else {
             $event = new OgoneEvent($parameters);
-            $this->eventDispatcher->dispatch(OgoneEvents::SUCCESS, $event);
+            $this->eventDispatcher->dispatch(OgoneEvents::ERROR, $event);
 
             $this->logger->info('failure');
         }

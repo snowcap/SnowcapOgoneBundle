@@ -27,11 +27,11 @@ class DefaultController extends Controller
     {
         $parameters = array_merge($this->getRequest()->query->all(),$this->getRequest()->request->all());
 
-        /** @var $ogone \Snowcap\OgoneBundle\Manager */
+        /** @var $ogone \Snowcap\OgoneBundle\OgoneManager */
         $ogone = $this->get('snowcap_ogone');
 
         $ogone->paymentResponse($parameters);
 
-        return new \Symfony\Component\HttpFoundation\Response('ok');
+        return new \Symfony\Component\HttpFoundation\Response();
     }
 }
