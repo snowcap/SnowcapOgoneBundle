@@ -1,8 +1,8 @@
 {
     "name": "snowcap/ogone-bundle",
     "type": "symfony-bundle",
-    "description": "Symfony SnowcapOgoneBundle",
-    "keywords": ["E-commerce","Ogone"],
+    "description": "Ogone wrapper for Symfony2",
+    "keywords": ["E-commerce","Ogone", "Symfony"],
     "homepage": "https://github.com/snowcap/SnowcapOgoneBundle",
     "license": "MIT",
     "authors": [
