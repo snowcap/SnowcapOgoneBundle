@@ -86,34 +86,54 @@ return array(
 Getting Ogone result
 -------------
 
-To catch Ogone's result, you have to create a service with a specific tag:
+To catch Ogone's result, you have to create a service and tag it as an event subscriber (or an event listener):
 For example:
 
 ``` yaml
-my_company_bundle.order:
-    class: MyCompany\MyBundle\Order
+my_company_bundle.ogone_subscriber:
+    class: MyCompany\MyBundle\Ogone\OgoneSubscriber
     tags:
-        -  { name: snowcap_ogone.listener }
+        - { name: kernel.event_subscriber }
 ```
 
-That service has to implement the Ogone listener class, like the following:
+That service has to implement the EventSubscriberInterface, like the following:
 
 ``` php
 <?php
-namespace MyCompany\MyBundle;
+namespace MyCompany\MyBundle\Ogone;
     
-use Snowcap\OgoneBundle\Listener\Ogone;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class Order implements Ogone
+use Snowcap\OgoneBundle\Event\OgoneEvent;
+use Snowcap\OgoneBundle\OgoneEvents;
+
+class OgoneSubscriber implements EventSubscriberInterface
 {
-    public function onOgoneSuccess($parameters)
+    /**
+     * @param \Snowcap\OgoneBundle\Event\OgoneEvent $event
+     */
+    public function onOgoneSuccess(OgoneEvent $event)
     {
-        // TODO: Implement onOgoneSuccess() method.
+        
+    }
+
+    /**
+     * @param \Snowcap\OgoneBundle\Event\OgoneEvent $event
+     */
+    public function onOgoneError(OgoneEvent $event)
+    {
+        
     }
     
-    public function onOgoneFailure($parameters)
+    /**
+     * @return array
+     */
+    public static function getSubscribedEvents()
     {
-        // TODO: Implement onOgoneFailure() method.
+        return array(
+            OgoneEvents::SUCCESS => 'onOgoneSuccess',
+            OgoneEvents::ERROR => 'onOgoneError'
+        );
     }
 }
 ```
