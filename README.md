@@ -1,7 +1,7 @@
 Introduction
 ============
 
-This bundle introduces the Ogone paiement process gateway into a Symfony project
+This bundle introduces the Ogone payment process gateway into a Symfony project
 It uses the marlon-ogone Bundle, and adds a different integration approach
 
 More info about Ogone can be found here: http://www.ogone.com
