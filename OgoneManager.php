@@ -178,13 +178,16 @@ class OgoneManager
             $this->eventDispatcher->dispatch(OgoneEvents::SUCCESS, $event);
 
             // handle payment confirmation
-            $this->logger->info('success');
+            $this->logger->info('Ogone payment success');
+
+	    return true;
         } else {
             $event = new OgoneEvent($parameters);
             $this->eventDispatcher->dispatch(OgoneEvents::ERROR, $event);
 
-            $this->logger->info('failure');
+            $this->logger->warn('Ogone payment failure', $parameters);
         }
+	return false;
     }
 
     /**
@@ -194,6 +197,9 @@ class OgoneManager
     private function localeToIso($locale)
     {
         switch ($locale) {
+       	    case 'de':
+                return 'de_DE';
+                break;
             case 'fr':
                 return 'fr_FR';
                 break;
