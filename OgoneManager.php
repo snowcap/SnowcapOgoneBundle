@@ -65,7 +65,7 @@ class OgoneManager
     protected $logger;
 
     /**
-     * @var \Ogone\FormGenerator\FormGenerator
+     * @var \Snowcap\OgoneBundle\FormGenerator
      */
     protected $formGenerator;
 
@@ -121,7 +121,7 @@ class OgoneManager
      * @param array $options
      * @return string
      */
-    public function getRequestForm($locale, $orderId, $customerName, $amount, $currency = "EUR", $options = array())
+    public function getRequestForm($locale, $orderId, $customerName, $amount, $currency = "EUR", $options = array(), $showSubmitButton = true)
     {
         $passphrase = $this->shaIn;
         $shaComposer = new AllParametersShaComposer($passphrase);
@@ -159,6 +159,7 @@ class OgoneManager
         $paymentRequest->setLanguage($this->localeToIso($locale));
         $paymentRequest->validate();
 
+        $this->formGenerator->showSubmitButton($showSubmitButton);
         return $this->formGenerator->render($paymentRequest);
     }
 
