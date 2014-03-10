@@ -19,6 +19,8 @@ use Ogone\ShaComposer\AllParametersShaComposer;
 use Ogone\ParameterFilter\ShaInParameterFilter;
 use Ogone\ParameterFilter\ShaOutParameterFilter;
 use Ogone\FormGenerator\FormGenerator;
+use Ogone\Ecommerce\EcommercePaymentRequest,
+    Ogone\Ecommerce\EcommercePaymentResponse;
 
 use Snowcap\OgoneBundle\Event\OgoneEvent;
 
@@ -127,14 +129,14 @@ class OgoneManager
         $shaComposer = new AllParametersShaComposer($passphrase);
         $shaComposer->addParameterFilter(new ShaInParameterFilter); //optional
 
-        $paymentRequest = new PaymentRequest($shaComposer);
+        $paymentRequest = new EcommercePaymentRequest($shaComposer);
 
         switch ($this->environment) {
             case 'prod':
-                $paymentRequest->setOgoneUri(PaymentRequest::PRODUCTION);
+                $paymentRequest->setOgoneUri(EcommercePaymentRequest::PRODUCTION);
                 break;
             default:
-                $paymentRequest->setOgoneUri(PaymentRequest::TEST);
+                $paymentRequest->setOgoneUri(EcommercePaymentRequest::TEST);
                 break;
         }
 
@@ -168,7 +170,7 @@ class OgoneManager
      */
     public function paymentResponse(array $parameters)
     {
-        $paymentResponse = new PaymentResponse($parameters);
+        $paymentResponse = new EcommercePaymentResponse($parameters);
 
         $passphrase = $this->shaOut;
         $shaComposer = new AllParametersShaComposer($passphrase);

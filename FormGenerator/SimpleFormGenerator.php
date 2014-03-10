@@ -14,6 +14,7 @@ use Twig_Environment;
 
 use Ogone\FormGenerator\FormGenerator;
 use Ogone\PaymentRequest;
+use Ogone\Ecommerce\EcommercePaymentRequest;
 
 class SimpleFormGenerator implements FormGenerator
 {
@@ -56,7 +57,7 @@ class SimpleFormGenerator implements FormGenerator
      *
      * @return string
      */
-    public function render(PaymentRequest $paymentRequest)
+    public function render(EcommercePaymentRequest $paymentRequest)
     {
         $this->paymentRequest = $paymentRequest;
 
