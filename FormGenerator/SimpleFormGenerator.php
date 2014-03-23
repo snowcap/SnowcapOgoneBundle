@@ -19,7 +19,7 @@ use Ogone\Ecommerce\EcommercePaymentRequest;
 class SimpleFormGenerator implements FormGenerator
 {
     /**
-     * @var PaymentRequest
+     * @var EcommercePaymentRequest
      */
     private $paymentRequest;
 
@@ -53,7 +53,7 @@ class SimpleFormGenerator implements FormGenerator
     }
 
     /**
-     * @param PaymentRequest $paymentRequest
+     * @param EcommercePaymentRequest $paymentRequest
      *
      * @return string
      */
