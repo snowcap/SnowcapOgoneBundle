@@ -10,11 +10,9 @@
 
 namespace Snowcap\OgoneBundle;
 
-use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Monolog\Logger;
 use Ogone\Passphrase;
-use Ogone\PaymentRequest;
-use Ogone\PaymentResponse;
 use Ogone\ShaComposer\AllParametersShaComposer;
 use Ogone\ParameterFilter\ShaInParameterFilter;
 use Ogone\ParameterFilter\ShaOutParameterFilter;
@@ -57,7 +55,7 @@ class OgoneManager
     protected $listeners = array();
 
     /**
-     * @var EventDispatcher
+     * @var EventDispatcherInterface
      */
     protected $eventDispatcher;
 
@@ -67,11 +65,12 @@ class OgoneManager
     protected $logger;
 
     /**
-     * @var \Snowcap\OgoneBundle\FormGenerator
+     * @var \Ogone\FormGenerator\FormGenerator
      */
     protected $formGenerator;
 
     /**
+     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
      * @param \Monolog\Logger $logger
      * @param \Ogone\FormGenerator\FormGenerator $formGenerator
      * @param $pspid
@@ -79,9 +78,10 @@ class OgoneManager
      * @param $shaIn
      * @param $shaOut
      * @param array $options
+     * @throws \Exception
      */
     public function __construct(
-        EventDispatcher $eventDispatcher,
+        EventDispatcherInterface $eventDispatcher,
         Logger $logger,
         FormGenerator $formGenerator,
         $pspid,
@@ -89,7 +89,8 @@ class OgoneManager
         $shaIn,
         $shaOut,
         $options = array()
-    ) {
+    )
+    {
         // TODO: use config validation
         if ($pspid === "") {
             throw new \Exception('No PSPID defined for Ogone');
@@ -115,12 +116,13 @@ class OgoneManager
     }
 
     /**
-     * @param $locale
-     * @param $orderId
-     * @param $customerName
-     * @param $amount
-     * @param string $currency
+     * @param string $locale
+     * @param string $orderId
+     * @param string $customerName
+     * @param integer $amount Amount in cents
+     * @param string $currency Example : EUR
      * @param array $options
+     * @param bool $showSubmitButton
      * @return string
      */
     public function getRequestForm($locale, $orderId, $customerName, $amount, $currency = "EUR", $options = array(), $showSubmitButton = true)
@@ -167,6 +169,7 @@ class OgoneManager
 
     /**
      * @param array $parameters
+     * @return bool
      */
     public function paymentResponse(array $parameters)
     {
@@ -183,14 +186,15 @@ class OgoneManager
             // handle payment confirmation
             $this->logger->info('Ogone payment success');
 
-	    return true;
+            return true;
         } else {
             $event = new OgoneEvent($parameters);
             $this->eventDispatcher->dispatch(OgoneEvents::ERROR, $event);
 
             $this->logger->warn('Ogone payment failure', $parameters);
         }
-	return false;
+
+        return false;
     }
 
     /**
@@ -200,7 +204,7 @@ class OgoneManager
     private function localeToIso($locale)
     {
         switch ($locale) {
-       	    case 'de':
+            case 'de':
                 return 'de_DE';
                 break;
             case 'fr':

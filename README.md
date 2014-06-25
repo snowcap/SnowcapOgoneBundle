@@ -71,7 +71,7 @@ An example could be:
 
 ``` php
 /** @var $ogone \Snowcap\OgoneBundle\Manager */
-$ogone = $this->get('snowcap_ogone.manager');
+$ogone = $this->get('snowcap_ogone');
 
 $ogoneForm = $ogone->getRequestForm($locale, $orderId, $customerName, $amount, $currency, array(
     'acceptUrl' => $this->generateUrl('your_success_page_route_name', array(), true),
@@ -79,8 +79,16 @@ $ogoneForm = $ogone->getRequestForm($locale, $orderId, $customerName, $amount, $
 ));
 
 return array(
-    'ogoneForm' => $ogoneForm,
+    'ogone_form' => $ogoneForm,
 );
+```
+
+Pay attention, this is not a Symfony form, just a simple rendered form provided by the Ogone library.
+
+``` twig
+...
+{{ ogone_form|raw }}
+
 ```
 
 Getting Ogone result
