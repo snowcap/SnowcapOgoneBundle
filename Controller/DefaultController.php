@@ -13,6 +13,7 @@ namespace Snowcap\OgoneBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @Route("/ogone")
@@ -23,9 +24,9 @@ class DefaultController extends Controller
     /**
      * @Route("")
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
-        $parameters = array_merge($this->getRequest()->query->all(),$this->getRequest()->request->all());
+        $parameters = array_merge($request->query->all(), $request->request->all());
 
         /** @var $ogone \Snowcap\OgoneBundle\OgoneManager */
         $ogone = $this->get('snowcap_ogone');
