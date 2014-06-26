@@ -27,13 +27,13 @@ Download the bundle:
 }
 ```
 
-``` bash
+```bash
 $ php composer.phar update snowcap/ogone-bundle
 ```
 
 Add it to your application's kernel:
 
-``` php
+```php
 // app/ApplicationKernel.php
 public function registerBundles()
 {
@@ -50,7 +50,7 @@ Configuration
 
 Put the following configuration options in your config file:
 
-``` yaml
+```yaml
 snowcap_ogone:
     pspid: [your_ogone_pspid]
     environment: [test|prod]
@@ -69,7 +69,7 @@ Getting the Ogone form to use in your view
 A service 'snowcap_ogone.manager' allows you to get the ogone form rendering, whereby you can also define the acceptUrl, and any other option you want to send to Ogone
 An example could be:
 
-``` php
+```php
 /** @var $ogone \Snowcap\OgoneBundle\Manager */
 $ogone = $this->get('snowcap_ogone');
 
@@ -85,7 +85,7 @@ return array(
 
 Pay attention, this is not a Symfony form, just a simple rendered form provided by the Ogone library.
 
-``` twig
+```twig
 ...
 {{ ogone_form|raw }}
 
@@ -94,10 +94,19 @@ Pay attention, this is not a Symfony form, just a simple rendered form provided 
 Getting Ogone result
 -------------
 
+First you need to add a route in your routing.yml
+
+```yaml
+snowcap_ogone:
+    resource: "@SnowcapOgoneBundle/Controller"
+    type: annotation
+
+```
+
 To catch Ogone's result, you have to create a service and tag it as an event subscriber (or an event listener):
 For example:
 
-``` yaml
+```yaml
 my_company_bundle.ogone_subscriber:
     class: MyCompany\MyBundle\Ogone\OgoneSubscriber
     tags:
@@ -106,7 +115,7 @@ my_company_bundle.ogone_subscriber:
 
 That service has to implement the EventSubscriberInterface, like the following:
 
-``` php
+```php
 <?php
 namespace MyCompany\MyBundle\Ogone;
     
