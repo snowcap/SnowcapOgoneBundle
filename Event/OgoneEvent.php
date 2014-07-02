@@ -34,8 +34,8 @@ class OgoneEvent extends Event
      */
     public function getParameter($name)
     {
-        if(!array_key_exists($name, $this->parameters)) {
-            throw new \InvalidArgumentException(sprintf('The parameter "%s" does not exist in Ogone response parameters'));
+        if (!array_key_exists($name, $this->parameters)) {
+            throw new \InvalidArgumentException(sprintf('The parameter "%s" does not exist in Ogone response parameters', $name));
         }
 
         return $this->parameters[$name];
