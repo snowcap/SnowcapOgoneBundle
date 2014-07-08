@@ -2,12 +2,19 @@
 
 namespace Snowcap\OgoneBundle\Tests;
 
+use Ogone\ShaComposer\AllParametersShaComposer;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 use Snowcap\OgoneBundle\OgoneManager;
 use Snowcap\OgoneBundle\OgoneEvents;
 
-class OgoneManagerTest extends \PHPUnit_Framework_TestCase {
+class OgoneManagerTest extends \PHPUnit_Framework_TestCase
+{
+    const PSPID = 'somepspid';
+    const ENVIRONMENT = 'test';
+    const SHA_IN = '123456abc';
+    const SHA_OUT = 'xyz987654';
+
     /**
      * @var OgoneManager
      */
@@ -42,17 +49,21 @@ class OgoneManagerTest extends \PHPUnit_Framework_TestCase {
                 ->disableOriginalConstructor()
                 ->getMock(),
             $simpleFormGeneratorMock,
-            'somepspid',
-            'test',
-            '123456abc',
-            'xyz987654'
+            self::PSPID,
+            self::ENVIRONMENT,
+            self::SHA_IN,
+            self::SHA_OUT
         );
     }
 
     public function testPaymentResponse()
     {
         $this->eventDispatcher->addListener(OgoneEvents::SUCCESS, array($this, 'setWasCalled'));
-        $this->ogoneManager->paymentResponse(array('SHASIGN' => sha1('somestring')));
+
+        $responseParameters = array(
+            'STATUS' => \Ogone\PaymentResponse::STATUS_AUTHORISED,
+        );
+        $this->ogoneManager->paymentResponse($this->addShaSign($responseParameters));
 
         $this->assertEquals(true, $this->wasCalled);
     }
@@ -66,5 +77,15 @@ class OgoneManagerTest extends \PHPUnit_Framework_TestCase {
     public function setWasCalled()
     {
         $this->wasCalled = true;
+    }
+
+    private function addShaSign(array $parameters)
+    {
+        return array_merge(
+            $parameters,
+            array(
+                'SHASIGN' => (new AllParametersShaComposer(new \Ogone\Passphrase(self::SHA_OUT)))->compose($parameters),
+            )
+        );
     }
 }
