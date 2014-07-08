@@ -33,8 +33,8 @@ class SnowcapOgoneExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
 
-        foreach (array('pspid','environment','sha_in','sha_out','options') as $attribute) {
-            $container->setParameter($attribute , $config[$attribute]);
+        foreach (array('pspid', 'environment', 'sha_in', 'sha_out', 'options') as $attribute) {
+            $container->setParameter('snowcap_ogone.' . $attribute , $config[$attribute]);
         }
     }
 }
