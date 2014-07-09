@@ -2,7 +2,7 @@
     "name": "snowcap/ogone-bundle",
     "type": "symfony-bundle",
     "description": "Ogone wrapper for Symfony2",
-    "keywords": ["E-commerce","Ogone", "Symfony"],
+    "keywords": ["E-commerce", "Ogone", "Symfony"],
     "homepage": "https://github.com/snowcap/SnowcapOgoneBundle",
     "license": "MIT",
     "authors": [
@@ -21,12 +21,17 @@
         {
             "name": "Snowcap",
             "homepage": "http://www.snowcap.be"
+        },
+        {
+            "name": "Nicolas Clavaud",
+            "email": "nicolas@lrqdo.fr"
         }
     ],
     "require": {
         "php": ">=5.3.2",
         "symfony/framework-bundle": ">=2.2",
         "symfony/monolog-bundle": ">=2.2",
+        "kriswallsmith/buzz": ">=0.5",
         "marlon-be/marlon-ogone": "dev-master"
     },
     "autoload": {

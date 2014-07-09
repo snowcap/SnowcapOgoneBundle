@@ -36,5 +36,9 @@ class SnowcapOgoneExtension extends Extension
         foreach (array('pspid', 'environment', 'sha_in', 'sha_out', 'options') as $attribute) {
             $container->setParameter('snowcap_ogone.' . $attribute , $config[$attribute]);
         }
+
+        foreach (array('user_id', 'password') as $attribute) {
+            $container->setParameter('snowcap_ogone.api.' . $attribute , $config['api'][$attribute]);
+        }
     }
 }

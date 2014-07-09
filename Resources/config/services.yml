@@ -4,6 +4,8 @@ parameters:
     snowcap_ogone.sha_in: ~
     snowcap_ogone.sha_out: ~
     snowcap_ogone.options: ~
+    snowcap_ogone.api.user_id: ~
+    snowcap_ogone.api.password: ~
 
 services:
     snowcap_ogone:
@@ -24,3 +26,14 @@ services:
             - @twig
             - %kernel.root_dir%
         private: true
+
+    snowcap_ogone.direct_link:
+        class: Snowcap\OgoneBundle\OgoneDirectLink
+        arguments:
+            - @logger
+            - %snowcap_ogone.pspid%
+            - %snowcap_ogone.environment%
+            - %snowcap_ogone.sha_in%
+            - %snowcap_ogone.sha_out%
+            - %snowcap_ogone.api.user_id%
+            - %snowcap_ogone.api.password%
