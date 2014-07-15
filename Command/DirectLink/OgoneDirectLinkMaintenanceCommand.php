@@ -41,6 +41,7 @@ abstract class OgoneDirectLinkMaintenanceCommand extends ContainerAwareCommand
         $params = array(
             'ORDERID',
             'PAYID',
+            'PAYIDSUB',
             'NCERROR',
             'NCERRORPLUS',
             'ACCEPTANCE',
